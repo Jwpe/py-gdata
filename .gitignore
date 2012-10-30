@@ -1,0 +1,13 @@
+*.pyc
+build/*
+dist/*
+.*.swp
+.project
+.pydevproject
+MANIFEST
+*.iml
+.idea/*
+
+.hgignore
+.hgtags
+.hg/*
