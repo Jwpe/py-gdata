@@ -172,6 +172,7 @@ class Racy(atom.AtomBase):
   _tag = 'racy'
   _namespace = YOUTUBE_NAMESPACE  
 
+
 class Description(atom.AtomBase):
   """The YouTube Description element."""
   _tag = 'description'
@@ -188,6 +189,23 @@ class NoEmbed(atom.AtomBase):
   """The YouTube VideoShare element. Whether a video can be embedded or not."""
   _tag = 'noembed'
   _namespace = YOUTUBE_NAMESPACE  
+
+
+class YouTubeRating(atom.AtomBase):
+  """The YouTube Rating element"""
+  _tag = 'rating'
+  _namespace = YOUTUBE_NAMESPACE
+  _attributes = atom.AtomBase._attributes.copy()
+  _attributes['numDislikes'] = 'num_dislikes'
+  _attributes['numLikes'] = 'num_likes'
+
+  def __init__(self, extension_elements=None, num_dislikes=None, num_likes=None,
+                extension_attributes=None, text=None):
+
+    self.num_dislikes = num_dislikes
+    self.num_likes = num_likes
+    atom.AtomBase.__init__(self, extension_elements=extension_elements,
+                           extension_attributes=extension_attributes, text=text)
 
 
 class Comments(atom.AtomBase):
@@ -246,12 +264,13 @@ class YouTubePlaylistVideoEntry(gdata.GDataEntry):
   _children['{%s}location' % YOUTUBE_NAMESPACE] = ('location', Location)
   _children['{%s}position' % YOUTUBE_NAMESPACE] = ('position', Position)
   _children['{%s}group' % gdata.media.MEDIA_NAMESPACE] = ('media', Media.Group)
+  _children['{%s}rating' % YOUTUBE_NAMESPACE] = ('yt_rating', YouTubeRating)
 
   def __init__(self, author=None, category=None, content=None,
                atom_id=None, link=None, published=None, title=None,
                updated=None, feed_link=None, description=None,
                rating=None, comments=None, statistics=None,
-               location=None, position=None, media=None,
+               location=None, position=None, media=None, yt_rating=None,
                extension_elements=None, extension_attributes=None):
 
     self.feed_link = feed_link
@@ -262,6 +281,7 @@ class YouTubePlaylistVideoEntry(gdata.GDataEntry):
     self.location = location
     self.position = position
     self.media = media
+    self.yt_rating = yt_rating
 
     gdata.GDataEntry.__init__(self, author=author, category=category,
                               content=content, atom_id=atom_id,
@@ -327,11 +347,14 @@ class YouTubeVideoResponseEntry(gdata.GDataEntry):
   _children['{%s}statistics' % YOUTUBE_NAMESPACE] = ('statistics', Statistics)
   _children['{%s}racy' % YOUTUBE_NAMESPACE] = ('racy', Racy)
   _children['{%s}group' % gdata.media.MEDIA_NAMESPACE] = ('media', Media.Group)
+  _children['{%s}rating' % YOUTUBE_NAMESPACE] = ('yt_rating', YouTubeRating)
+
 
   def __init__(self, author=None, category=None, content=None, atom_id=None,
                link=None, published=None, title=None, updated=None, rating=None,
                noembed=None, statistics=None, racy=None, media=None,
-               extension_elements=None, extension_attributes=None):
+               yt_rating=None, extension_elements=None, 
+               extension_attributes=None):
 
     gdata.GDataEntry.__init__(self, author=author, category=category,
                               content=content, atom_id=atom_id, link=link,
@@ -342,6 +365,7 @@ class YouTubeVideoResponseEntry(gdata.GDataEntry):
     self.statistics = statistics
     self.racy = racy
     self.media = media or Media.Group()
+    self.yt_rating = yt_rating
 
 
 class YouTubeContactEntry(gdata.GDataEntry):
@@ -381,12 +405,14 @@ class YouTubeVideoEntry(gdata.GDataEntry):
   _children['{%s}racy' % YOUTUBE_NAMESPACE] = ('racy', Racy)
   _children['{%s}group' % gdata.media.MEDIA_NAMESPACE] = ('media', Media.Group)
   _children['{%s}where' % gdata.geo.GEORSS_NAMESPACE] = ('geo', Geo.Where)
+  _children['{%s}rating' % YOUTUBE_NAMESPACE] = ('yt_rating', YouTubeRating)
+
 
   def __init__(self, author=None, category=None, content=None, atom_id=None,
                link=None, published=None, title=None, updated=None, rating=None,
                noembed=None, statistics=None, racy=None, media=None, geo=None,
-               recorded=None, comments=None, extension_elements=None, 
-               extension_attributes=None):
+               recorded=None, comments=None, yt_rating=None, 
+               extension_elements=None, extension_attributes=None):
 
     self.rating = rating
     self.noembed = noembed
@@ -396,6 +422,7 @@ class YouTubeVideoEntry(gdata.GDataEntry):
     self.media = media or Media.Group()
     self.geo = geo
     self.recorded = recorded
+    self.yt_rating = yt_rating
 
     gdata.GDataEntry.__init__(self, author=author, category=category,
                               content=content, atom_id=atom_id, link=link,

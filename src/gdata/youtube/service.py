@@ -170,7 +170,7 @@ class YouTubeService(gdata.service.GDataService):
       self.additional_headers['X-GData-Key'] = 'key=%s' % developer_key
 
     if 'GData-Version' not in self.additional_headers:
-      self.additional_headers['GData-Version'] = 1
+      self.additional_headers['GData-Version'] = 2
 
     self.auth_service_url = YOUTUBE_CLIENTLOGIN_AUTHENTICATION_URL
 

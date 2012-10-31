@@ -159,6 +159,13 @@ class YtRacy(atom.core.XmlElement):
   _qname = YT_TEMPLATE % 'racy'
 
 
+class YtRating(atom.core.XmlElement):
+  """Youtube rating (likes and dislikes)"""
+  _qname = YT_TEMPLATE % 'rating'
+  num_dislikes = 'numDislikes'
+  num_likes = 'numLikes'
+
+
 class YtRecorded(atom.core.XmlElement):
   """Date when the video was recorded"""
   _qname = YT_TEMPLATE % 'recorded'
@@ -412,6 +419,7 @@ class VideoEntryBase(gdata.data.GDEntry):
   recorded = YtRecorded
   where = gdata.geo.data.GeoRssWhere
   rating = gdata.data.Rating
+  yt_rating = YtRating
   noembed = YtNoEmbed
   location = YtLocation
   comments = gdata.data.Comments
